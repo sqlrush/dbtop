@@ -1,6 +1,20 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+执行计划变更检测模块 (Plan Change)
+
+检测 Oracle SQL 执行计划是否发生变更，变更通常导致性能回退。
+
+检测逻辑:
+    - 对比 v$sql 中同一 SQL_ID 的不同 plan_hash_value
+    - 当检测到 SQL 的执行计划发生变更时触发应急
+    - 将变更的 SQL_ID 高亮标记在会话面板中（黄色）
+
+交互命令:
+    - 展示执行计划变更详情
+    - 提供 SQL Profile / SQL Plan Baseline 固定执行计划的建议命令
+"""
 
 import curses
 from datetime import datetime

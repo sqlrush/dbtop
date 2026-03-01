@@ -1,6 +1,16 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+内存快照持久化模块 (Memory Persist)
+
+应急模块的快照管理器，维护最近 N 个采样周期的监控数据快照。
+
+核心功能:
+    - 维护递增的 snap_id（快照序号）
+    - 为应急子模块提供快照 ID 查询（get_snap_id）
+    - 作为应急日志持久化的数据源，记录触发应急前后的监控状态
+"""
 
 from common import log
 from common.config import Config

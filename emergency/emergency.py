@@ -1,6 +1,32 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+应急预案主控模块 (Emergency Main)
+
+协调所有应急检测子模块的运行、展示和持久化。
+
+核心职责:
+    - emergency_main(): 每个刷新周期调用，将当前监控数据分发给 8 个子模块并行分析
+    - emergency_print(): 在终端底部展示已触发的应急信息（红色高亮）
+    - emergency_persist(): 保存触发应急时的屏幕快照到日志文件
+    - 提供交互命令入口：用户在应急面板按 'k' 可执行子模块的处理命令
+
+8 个应急子模块:
+    1. PlanChange — 执行计划变更检测
+    2. MemoryFull — SGA/PGA 内存异常检测
+    3. IOFull — I/O 满载检测
+    4. CPUFull — CPU 满载检测
+    5. SessionsFull — 活跃会话数过多检测
+    6. ConnectionsFull — 连接数过多检测
+    7. PerformanceJitter — 性能抖动检测
+    8. SlowSQL — 慢 SQL 检测
+
+运行机制:
+    - 各子模块在独立线程中并行执行 analyze()
+    - 任一子模块触发应急 → emergency_triggered = True → 终端显示应急面板
+    - 应急触发时自动开始持久化屏幕快照，持续 snapshot_persist_number 个采样周期
+"""
 
 import copy
 import curses

@@ -1,6 +1,16 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+数据库持久化模块 (DB Persist)
+
+通过独立的数据库连接执行应急模块所需的数据库操作。
+
+核心功能:
+    - 维护独立的 Oracle 连接（与主监控连接分离，避免互相影响）
+    - 提供带自动重连和慢查询日志的 SQL 执行接口
+    - 支持 SYSDBA 和用户名/密码两种连接模式
+"""
 
 try:
     import oracledb

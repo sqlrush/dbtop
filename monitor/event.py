@@ -1,6 +1,27 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+等待事件监控模块 (Event Monitor)
+
+实时采集 Oracle 等待事件和 DB CPU，按时间占比排序展示 Top N 等待事件。
+
+监控指标（每行一个等待事件）:
+    - EVENT: 等待事件名称（首行固定显示 DB CPU）
+    - TOTAL WAITS: 统计周期内的等待次数
+    - TIME(us): 统计周期内的等待总时间（微秒）
+    - AVG(us): 单次等待平均耗时（微秒）
+    - PCT: 时间占比 = event_time / (sum_all_non_idle_waits + DB_CPU)
+    - WAIT_CLASS: 等待事件类别
+
+两种展示模式（快捷键切换）:
+    - RT (Real-Time): 实时模式，展示相邻两次采样的增量数据
+    - C (Cumulative): 累计模式，展示实例启动以来的累计数据
+
+数据来源:
+    - v$system_event: 系统级等待事件统计（排除 Idle 类等待）
+    - v$sys_time_model: DB CPU 时间
+"""
 
 import curses
 from .monitor_base import Monitor

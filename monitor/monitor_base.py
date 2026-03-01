@@ -1,6 +1,23 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+监控基类模块 (Monitor Base)
+
+所有监控面板的抽象基类，定义了监控模块的统一接口和公共行为。
+
+核心职责:
+    - 定义 refresh() / print() / parse_config() 抽象接口
+    - 管理 curses pad 的创建、清屏、输出（支持 daemon 模式下无终端运行）
+    - 封装 SQL 执行器和 OS 命令执行器（通过 util 工厂函数创建）
+    - 提供告警上报接口 check_and_report_alarm()
+    - 管理 dump_data 用于应急模块的屏幕快照持久化
+    - 通过 create_logged_pad() 实现双写：同时输出到 curses pad 和 dump_data 字典
+    - 会话终止功能：terminate_session() / terminate_backend()
+
+子类实现:
+    DBMonitor, OSMonitor, InsMonitor, EventMonitor, SessionMonitor, MemoryMonitor
+"""
 
 import curses
 import copy

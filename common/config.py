@@ -1,6 +1,24 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+配置管理模块 (Configuration Manager)
+
+基于单例模式的全局配置中心，负责加载、解析和管理 dbtop 的所有配置项。
+
+核心功能:
+    - 从 INI 格式配置文件 (dbtop.cfg) 加载配置，支持多级 section（如 main.host）
+    - 将命令行参数 (argparse) 与配置文件合并，命令行参数优先级更高
+    - 提供线程安全的全局访问接口 Config.get("main.interval")
+    - 自动类型推断：整数、浮点数、布尔值、字符串
+
+配置优先级: 命令行参数 > 配置文件
+
+典型用法:
+    Config.init_instance("dbtop.cfg", args)  # 程序启动时初始化
+    interval = Config.get("main.interval")   # 任意位置读取配置
+    Config.set("main.db_password", pwd)      # 运行时动态设置
+"""
 
 import os
 from copy import deepcopy

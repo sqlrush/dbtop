@@ -1,6 +1,18 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+常量定义模块 (Constants)
+
+集中管理 dbtop 的所有常量，包括:
+    - 界面布局参数：应急模块和内存模块的起始坐标
+    - 帮助文档：DETAIL_HELP 包含完整的快捷键说明和各监控面板字段含义
+    - 会话终止 PL/SQL 匿名块：用于批量终止 Oracle 会话的 4 种模板
+      * TERMINATE_LIMITED_SESSIONS — 按 SQL_ID 终止指定数量的会话
+      * TERMINATE_LIMITED_SESSIONS_WITHTIME — 仅终止执行超时的会话（限制数量）
+      * TERMINATE_UNLIMITED_SESSIONS — 按 SQL_ID 终止所有匹配会话
+      * TERMINATE_UNLIMITED_SESSIONS_WITHTIME — 终止所有超时的匹配会话
+"""
 
 EMER_CURSOR_Y_START = 44
 EMER_CURSOR_X_START = 0

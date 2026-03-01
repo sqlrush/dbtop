@@ -1,6 +1,31 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+实例监控模块 (Instance Monitor)
+
+实时采集 Oracle 数据库实例级关键性能指标，显示在终端第三行。
+
+监控指标:
+    - SN: 当前会话总数 (v$session)
+    - AN: 非空闲等待的活跃会话数
+    - ASC: 正在执行 SQL 的活跃会话数 (ON CPU)
+    - ASI: 正在等待 I/O 的活跃会话数
+    - IDL: 空闲等待的会话数
+    - MBPS: 数据库进程 I/O 读写量 (通过 pidstat 监控 ora_dbw 进程)
+    - TPS: 每秒事务数 (基于 v$sysstat user commits 增量计算)
+    - QPS: 每秒查询数 (基于 v$sysstat execute count 增量计算)
+    - P95(ms): SQL P95 时延
+    - REDO(kB/s): Redo 日志生成速率
+    - CONNECTION(c/m): 连接数使用率 (当前/最大)
+    - PROCESSES: 进程使用率 (当前/最大)
+
+数据来源:
+    - v$sysstat: TPS、QPS、Redo 等累计统计值（通过相邻采样差值计算速率）
+    - v$session: 会话数和状态分布
+    - v$parameter: 最大会话数和进程数
+    - pidstat: Oracle 后台写进程的 I/O 吞吐量（独立线程采集）
+"""
 
 from .monitor_base import Monitor
 from common.config import Config

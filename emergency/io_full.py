@@ -1,6 +1,21 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+I/O 满载应急模块 (IO Full)
+
+检测 I/O 等待会话数过多，分析 I/O 密集型 SQL 并提供会话终止能力。
+
+检测逻辑:
+    - 当处于 USR I/O 状态的活跃会话数超过阈值时触发
+    - 分析 I/O 等待会话的 Top SQL，统计 DB Time 和 I/O Time
+    - 展示 db file sequential read / db file scattered read 等 I/O 等待细节
+
+交互命令 (按 'k'):
+    - 终止选中 SQL_ID 的部分/全部会话
+    - 终止执行超时的会话
+    - 终止空闲/无事务会话释放资源
+"""
 
 from .emergency_base import Emergency
 from common.config import Config

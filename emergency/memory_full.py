@@ -1,6 +1,20 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+内存满载应急模块 (Memory Full)
+
+检测 SGA 或 PGA 内存使用异常。
+
+检测逻辑:
+    - SGA 满载: SGA 空闲比例低于阈值 → 触发 EMER_SGA_MEMORY_FULL
+    - PGA 异常: 单会话 PGA 占用过大 → 触发 EMER_SESSION_PGA_MEMORY_FULL
+    - 触发后联动内存监控模块高亮显示异常组件
+
+告警输出:
+    - 内存使用详情和异常组件/会话
+    - 建议的内存参数调整命令
+"""
 
 from .emergency_base import Emergency
 from common.config import Config

@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+dbtop 安装配置 (Setup)
+
+通过 pip install . 安装后，可直接使用 'dbtop' 命令启动。
+entry_points 将 tool.dbtop:main 注册为 console_scripts。
+package_data 确保 dbtop.cfg 和 monitor/*.cfg 配置文件随包安装。
+"""
 
 from setuptools import setup, find_packages
 

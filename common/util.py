@@ -1,6 +1,30 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+工具函数模块 (Utilities)
+
+提供 dbtop 全局共享的基础设施函数。
+
+数据库连接管理:
+    - get_connection(): 获取全局共享的 Oracle 连接（线程安全单例）
+      支持 SYSDBA 免密模式和用户名/密码模式
+    - check_connection(): 心跳检测，连接失效时自动置空触发重连
+
+监控辅助:
+    - should_refresh_memory(): 动态内存刷新控制，CPU 高负载时跳过内存采集以降低开销
+    - should_exit(): 检测刷新线程是否超过 5 分钟未更新（看门狗机制）
+    - update_cpu_usage(): 跨模块共享 CPU 使用率
+
+SQL/命令执行器工厂:
+    - create_execute_query(): 创建带慢查询日志的 SQL 执行函数
+    - create_execute_os_command(): 创建带慢命令日志的 Shell 命令执行函数
+    - log_slow_function(): 装饰器，记录超过阈值的慢函数调用
+
+终端交互:
+    - get_input_number(): curses 环境下安全读取数字输入
+    - terminate_confirm_passed(): 会话终止二次确认对话框
+"""
 
 import curses
 import subprocess

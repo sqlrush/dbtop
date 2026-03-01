@@ -1,6 +1,21 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+CPU 满载应急模块 (CPU Full)
+
+检测操作系统 CPU 使用率过高，分析 Top SQL 并提供会话终止能力。
+
+检测逻辑:
+    - 当 OS %CPU 超过配置阈值时触发
+    - 分析 ON CPU 状态的活跃会话，按 SQL_ID 聚合统计
+    - 展示 Top SQL 及其 DB Time、CPU Time 分布
+
+交互命令 (按 'k'):
+    - 终止选中 SQL_ID 的部分/全部会话
+    - 终止执行超时的会话
+    - 终止空闲/无事务会话释放资源
+"""
 
 from .emergency_base import Emergency
 from common.config import Config

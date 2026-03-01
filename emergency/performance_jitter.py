@@ -1,6 +1,20 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+性能抖动检测模块 (Performance Jitter)
+
+检测数据库性能指标的突变，识别性能抖动事件。
+
+检测逻辑:
+    - 监控 db%、TPS、QPS 等关键指标的变化幅度
+    - 当指标在短时间内出现大幅波动时触发应急
+    - 结合等待事件分析抖动根因
+
+告警输出:
+    - 记录抖动时刻的指标值和变化幅度
+    - 输出可能的根因分析（等待事件、资源瓶颈等）
+"""
 
 from .emergency_base import Emergency
 from common.config import Config
