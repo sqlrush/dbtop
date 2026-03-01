@@ -1,6 +1,22 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+告警模块 (Alarm)
+
+负责将监控指标超阈值事件写入告警文件，支持告警抑制。
+
+核心功能:
+    - 监控指标阈值检测：当 TPS、QPS、CPU、连接数等指标超过配置阈值时触发告警
+    - 告警抑制：同一告警 key 在 suppression_interval 内不重复上报
+    - 应急模块告警：锁阻塞、CPU 满载等应急事件的专用告警通道
+    - 告警输出：写入配置的 alarm_file 文件，格式 [ALARM][时间][主机名]告警内容
+
+告警流程:
+    start_alarm()                           # 初始化，打开告警文件
+    check_and_report_alarm(logger, key, v)  # 检测阈值并上报
+    stop_alarm()                            # 关闭告警文件
+"""
 
 import socket
 import time

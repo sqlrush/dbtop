@@ -1,6 +1,35 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+内存监控模块 (Memory Monitor)
+
+独立视图（快捷键 'm' 切换），深度分析 Oracle SGA 和 PGA 内存使用情况。
+
+四个监控面板:
+    Panel 0 - SGA/PGA 概览:
+        SGA 最大值、已用百分比、空闲量；PGA 分配量、已用量、可释放量
+
+    Panel 1 - TOP 5 SGA 组件:
+        按 pool 聚合的 SGA 组件大小（shared pool, buffer cache, large pool 等）
+
+    Panel 2 - TOP 10 会话内存 (PGA):
+        按 PGA 分配量降序排列的 Top 10 用户会话（SID, USERNAME, PROGRAM, PGA 详情）
+
+    Panel 3 - TOP 10 进程内存 (PGA):
+        按 PGA 分配量降序排列的 Top 10 Oracle 进程（PID, PROGRAM, PGA 详情）
+
+运行机制:
+    - 独立刷新线程，刷新间隔由 main.mem_interval 控制
+    - CPU 高负载时自动跳过 Panel 2/3 的刷新（降低采集开销）
+    - 支持与应急模块联动：SGA 满/PGA 异常时高亮显示
+
+数据来源:
+    - v$sgainfo: SGA 总览
+    - v$sgastat: SGA 组件明细
+    - v$pgastat: PGA 聚合统计
+    - v$session + v$process: 会话和进程级 PGA 明细
+"""
 
 import curses
 from datetime import datetime

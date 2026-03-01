@@ -1,6 +1,21 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+会话满载应急模块 (Sessions Full)
+
+检测活跃会话数过多，分析 Top SQL 并提供批量终止能力。
+
+检测逻辑:
+    - 当活跃会话数 (AN) 超过配置阈值时触发
+    - 按 SQL_ID 聚合分析活跃会话的 DB Time 和 CPU Time
+    - 支持白名单用户豁免
+
+交互命令 (按 'k'):
+    - 终止选中 SQL_ID 的部分/全部会话
+    - 终止执行超时的会话
+    - 终止空闲/无事务/idle in transaction 会话
+"""
 
 from .emergency_base import Emergency
 from common.config import Config

@@ -1,6 +1,23 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+数据持久化日志模块 (Data Logger)
+
+将 dbtop 的实时监控数据持久化到日志文件，用于离线分析和历史回溯。
+
+核心组件:
+    - DataLogger: 后台线程，从消息队列消费 DB/OS/Instance 监控数据，按固定间隔写入日志
+    - CompressedDynamicFileHandler: 自定义日志处理器，支持自动轮转和 gzip 压缩
+    - DBInfo: 数据库信息容器，用于生成包含版本、用户、角色的日志文件名
+
+日志文件特点:
+    - 文件名格式: dbtop_log_Oracle_{version}_{user}_{role}_{timestamp}.log
+    - 自动轮转: 达到 max_size 后自动创建新文件
+    - 自动压缩: 旧文件自动 gzip 压缩，节省磁盘空间
+    - 自动清理: 超过 backup_count 的最早备份自动删除
+    - 每 30 行自动打印一次表头，便于阅读
+"""
 
 import logging
 import logging.handlers

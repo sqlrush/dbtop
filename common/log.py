@@ -1,6 +1,22 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+日志模块 (Logger)
+
+对 Python logging 模块的轻量封装，提供统一的日志接口。
+
+核心功能:
+    - 基于 RotatingFileHandler 的自动日志轮转（默认 10MB/文件，保留 5 个备份）
+    - 统一的日志格式：时间戳(毫秒精度) - 模块名 - 级别 - 消息
+    - 支持按模块创建独立的 Logger 实例（如 dbtop、emergency、data 等）
+    - 提供模块级快捷函数 log.info()、log.error() 等
+
+典型用法:
+    logger = Logger(name='dbtop', log_file='dbtop_app.log', level='WARNING')
+    logger.info("Monitor started")
+    logger.error("Connection failed: %s", err)
+"""
 
 import logging
 import logging.handlers

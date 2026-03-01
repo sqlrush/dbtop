@@ -1,6 +1,23 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+应急预案基类模块 (Emergency Base)
+
+所有应急检测模块的抽象基类，定义了应急分析、告警和会话终止的统一框架。
+
+核心职责:
+    - 定义 analyze() 抽象接口：子类实现各自的异常检测逻辑
+    - 定义 handle_emergency_command() 抽象接口：子类实现交互式处理命令
+    - 提供会话终止工具方法：单个终止、批量终止（限数/不限数）、超时终止
+    - 提供空闲会话清理方法：terminate_idle_sessions / terminate_none_sessions
+    - 应急日志持久化：将触发时的屏幕快照保存到独立日志文件
+    - SQL 分析辅助：analyze_session() 聚合活跃会话的 Top SQL 和时间模型数据
+
+子类实现:
+    PlanChange, PerformanceJitter, SlowSQL, CPUFull, IOFull,
+    MemoryFull, SessionsFull, ConnectionsFull
+"""
 
 import re
 from abc import ABC, abstractmethod

@@ -1,6 +1,39 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+会话监控模块 (Session Monitor)
+
+实时展示所有用户会话的详细信息，支持交互式操作，是 dbtop 最核心的监控面板。
+
+监控指标（每行一个会话）:
+    - SID: Oracle 会话 ID
+    - USR: 登录用户名
+    - PROG: 客户端程序名
+    - PGA(m): 会话 PGA 内存使用量 (MB)
+    - SQLID: 当前执行的 SQL_ID
+    - SQL: SQL 语句文本（截取前 200 字符）
+    - OPN: SQL 操作类型 (SELECT/INSERT/UPDATE/DELETE 等)
+    - BLOCKER: 阻塞当前会话的 SID
+    - E/T(ms): 当前 SQL 已执行时间（毫秒）
+    - STA: 会话状态 (ACTIVE/INACTIVE)
+    - STE: 会话活动状态 (ON CPU / USR I/O / WAITING / IDLE)
+    - EVENT: 当前等待事件
+    - SParse: SQL 软解析率 (%)
+    - BLK: 阻塞状态标记 (H=锁持有者, W=锁等待者, H&W=两者皆是)
+
+交互功能（进入 's' 模式后）:
+    - 方向键/n/N: 逐行移动、翻页
+    - t/m/e: 按执行时间/内存/等待事件排序
+    - p: 查看会话详情（SQL 全文、执行计划、阻塞树）
+    - k: 终止选中会话
+    - K: 终止同 SQL_ID 的所有会话
+
+锁分析:
+    - 自动检测并标记锁持有者(红色)、锁等待者(绿色)、死锁(青色)
+    - 阻塞树可视化：展示完整的锁等待链和相关 SQL
+    - 死锁自动检测：通过图遍历检测环形等待
+"""
 
 from .monitor_base import Monitor
 from common.config import Config

@@ -1,6 +1,20 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+连接数满载应急模块 (Connections Full)
+
+检测数据库连接数使用率过高，按用户维度分析并提供批量终止能力。
+
+检测逻辑:
+    - 当连接数使用率 CONNECTION(c/m) 超过配置阈值时触发
+    - 按用户名聚合统计连接数和活跃会话数
+    - 支持白名单用户豁免
+
+交互命令 (按 'k'):
+    - 终止选中用户的空闲/无事务/idle in transaction 会话
+    - 终止选中用户 Top N 活跃会话
+"""
 
 from .emergency_base import Emergency
 from common.config import Config

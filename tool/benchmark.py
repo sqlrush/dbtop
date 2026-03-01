@@ -3,8 +3,31 @@
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
 """
-Oracle Database TPS/QPS Benchmark Tool
-用法: python3 benchmark.py [--processes N] [--duration SEC] [--mode tps|qps]
+Oracle 数据库 TPS/QPS 压测工具 (Benchmark Tool)
+
+基于 Python multiprocessing 的数据库负载生成器，用于压测 Oracle 的事务处理和查询性能。
+
+两种压测模式:
+    TPS 模式 (-m tps):
+        - PL/SQL 批量执行 INSERT(10%) + UPDATE(90%)，每次循环末尾 COMMIT
+        - 使用 COMMIT WRITE BATCH NOWAIT 最大化吞吐
+        - 目标表: bench_test (1M 行, HASH 32 分区, 减少 buffer busy waits)
+        - 序列: bench_seq (CACHE 50000 NOORDER, 减少序列 latch 争用)
+
+    QPS 模式 (-m qps):
+        - PL/SQL 批量执行 SELECT，通过 DBMS_RANDOM 生成随机 ID 查询
+        - 查询 bench_test 表的 val 和 num 列
+        - 纯只读，不产生事务
+
+性能关键点:
+    - PL/SQL 内循环: 减少 Python↔Oracle 网络往返（每次调用执行 N 条 SQL）
+    - multiprocessing: 多进程并行，绕过 Python GIL
+    - 共享计数器: ctypes.c_long + Lock，跨进程安全累加
+
+用法:
+    python3 benchmark.py -m tps -n 64 -t 120   # 64 进程 TPS 压测 120 秒
+    python3 benchmark.py -m qps -n 64 -t 300   # 64 进程 QPS 压测 300 秒
+    python3 benchmark.py --no-sysdba -u system -p pwd  # 用户名密码连接
 """
 
 import argparse

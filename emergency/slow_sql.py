@@ -1,6 +1,21 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+慢 SQL 检测模块 (Slow SQL)
+
+检测执行时间超过阈值的 SQL 语句。
+
+检测逻辑:
+    - 扫描所有活跃会话，检查 SQL 执行时间是否超过配置阈值
+    - 区分首次超时和持续超时，避免重复告警
+    - 聚合同一 SQL_ID 的会话数和累计时间
+
+告警输出:
+    - 超时 SQL 的 SQL_ID、SQL 文本、执行时间
+    - 受影响的会话数和累计资源消耗
+    - 提供 GATHER_TABLE_STATS 等优化建议命令
+"""
 
 from datetime import datetime
 import re

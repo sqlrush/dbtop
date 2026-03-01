@@ -1,6 +1,45 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+dbtop 主程序入口 (Main Entry Point)
+
+Oracle 数据库实时监控工具，类似 htop 但面向数据库，基于 curses 终端 UI。
+
+架构概览:
+    ┌─────────────────────────────────────────────────┐
+    │  DB Monitor    — 版本/角色/SGA/PGA/db%/WTR%     │ ← db.py
+    │  OS Monitor    — LOAD/%CPU/%MEM/IO 指标          │ ← operating_system.py
+    │  INS Monitor   — SN/AN/TPS/QPS/REDO/连接数       │ ← instance.py
+    │  Event Monitor — Top N 等待事件 (RT/Cumulative)   │ ← event.py
+    │  Session Monitor — 全量会话列表（可交互）          │ ← session.py
+    │  Emergency Panel — 应急预案触发信息               │ ← emergency/
+    └─────────────────────────────────────────────────┘
+
+运行模式:
+    - 交互模式 (默认): curses 全屏终端 UI，支持快捷键操作
+    - Daemon 模式 (-d): 无终端输出，仅写入日志文件，适合后台运行
+
+启动流程:
+    1. 解析命令行参数 + 加载 dbtop.cfg 配置文件
+    2. 并发用户数检测（防止多实例同时运行）
+    3. 数据库连接（SYSDBA 免密 或 用户名/密码）
+    4. 初始化 5 个监控模块 + 内存监控 + 应急模块
+    5. 启动 DbtopRefresher 后台线程（定时刷新所有监控模块）
+    6. 主线程进入事件循环，处理键盘输入和屏幕输出
+
+快捷键:
+    r/c — 切换等待事件实时/累计模式
+    s — 进入会话交互模式（方向键/排序/终止/详情）
+    m — 切换到内存监控视图
+    e — 进入应急预案交互模式
+    q — 退出
+
+用法:
+    dbtop                          # SYSDBA 免密启动
+    dbtop -u system -H 10.0.0.1   # 指定用户和主机
+    dbtop -d                       # daemon 后台模式
+"""
 
 import argparse
 import curses

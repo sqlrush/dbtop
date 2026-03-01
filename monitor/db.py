@@ -1,6 +1,28 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+数据库概览监控模块 (DB Monitor)
+
+显示在终端第一行，提供数据库实例的基本信息和繁忙度指标。
+
+监控指标:
+    - Oracle 版本号 (v$version)
+    - 当前登录用户名
+    - 当前时间 (yyyy-mm-dd hh:mm:ss)
+    - 数据库启动时间
+    - ROLE: 数据库角色 (PRIMARY / PHYSICAL STANDBY)
+    - MB SGA: SGA 内存总量 (MB)
+    - MB PGA: PGA 内存总分配量 (MB)
+    - db%: 数据库 CPU 繁忙度 = DB_CPU_delta / (time_interval × nproc) × 100
+    - WTR%: 等待时间占比 = (DB_time - DB_CPU) / DB_time × 100
+
+计算说明:
+    - db% 和 WTR% 基于 v$sys_time_model 的 DB CPU 和 DB time 增量计算
+    - DB CPU 和 DB time 的单位为微秒
+    - nproc 为 CPU 核数（通过 OS 命令获取）
+    - 数据库角色定期刷新（每 1000 次采样重新查询）
+"""
 
 from .monitor_base import Monitor
 from common import util

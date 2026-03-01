@@ -1,6 +1,27 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) ailinkdb. All rights reserved.
 # Author: sqlrush
+"""
+操作系统监控模块 (OS Monitor)
+
+实时采集数据库服务器的操作系统级性能指标，显示在终端第二行。
+
+监控指标:
+    - LOAD: 系统 1 分钟负载 (/proc/loadavg)
+    - %CPU: CPU 使用率（通过 /proc/stat 计算，排除 idle 时间）
+    - %MEM: 内存使用率 (MemTotal - MemAvailable) / MemTotal
+    - r/s, w/s: 每秒读写 I/O 次数
+    - rkB/s, wkB/s: 每秒读写吞吐量 (kB)
+    - r_await, w_await: 平均读写 I/O 延迟 (ms)
+    - r_asize(kB), w_asize(kB): 平均单次读写 I/O 大小
+    - aqu-sz: 磁盘请求队列平均长度
+
+I/O 监控特点:
+    - 自动定位 Oracle 数据文件所在物理磁盘（通过 v$datafile + df + lsblk 追溯）
+    - 支持多磁盘聚合统计（多个物理设备自动累加）
+    - 通过 /proc/diskstats 直接采集，避免依赖外部工具
+    - aqu-sz 通过独立的 iostat 后台线程采集
+"""
 
 from .monitor_base import Monitor
 from common.config import Config
